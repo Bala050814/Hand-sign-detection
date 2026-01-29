@@ -75,7 +75,7 @@ while True:
                 A person shows a hand sign meaning '{gesture}'.
                 Convert this into a short, natural sentence.
                 """
-try:
+                try:
                     response = model.generate_content(prompt)
                     genai_text = response.text.strip()
 
