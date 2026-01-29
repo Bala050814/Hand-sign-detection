@@ -75,3 +75,30 @@ while True:
                 A person shows a hand sign meaning '{gesture}'.
                 Convert this into a short, natural sentence.
                 """
+try:
+                    response = model.generate_content(prompt)
+                    genai_text = response.text.strip()
+
+                    print("Gesture:", gesture)
+                    print("Gemini:", genai_text)
+
+                    engine.say(genai_text)
+                    engine.runAndWait()
+                except Exception as e:
+                    print(f"Error with Gemini: {e}")
+
+                last_time = time.time()
+
+            if gesture:
+                cv2.putText(frame, gesture, (30, 60),
+                            cv2.FONT_HERSHEY_SIMPLEX, 1,
+                            (0, 255, 0), 2)
+
+    cv2.imshow("Hand Sign Recognition (Gemini)", frame)
+
+    if cv2.waitKey(1) & 0xFF == 27:  # ESC key
+        break
+
+cap.release()
+cv2.destroyAllWindows()
+print("Application closed.")
