@@ -51,3 +51,27 @@ last_time = 0
 
 print("Starting hand gesture recognition...")
 print("Press 'ESC' to exit")
+
+# ---------------- MAIN LOOP ----------------
+while True:
+    ret, frame = cap.read()
+    if not ret:
+        print("Error: Cannot read frame")
+        break
+        
+    frame = cv2.flip(frame, 1)
+    rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+    result = hand_detector.process(rgb)
+
+    if result.multi_hand_landmarks:
+        for hand in result.multi_hand_landmarks:
+            mp_draw.draw_landmarks(frame, hand, mp_hands.HAND_CONNECTIONS)
+
+            fingers = count_fingers(hand)
+            gesture = gesture_map.get(fingers, None)
+
+            if gesture and time.time() - last_time > 3:
+                prompt = f"""
+                A person shows a hand sign meaning '{gesture}'.
+                Convert this into a short, natural sentence.
+                """
